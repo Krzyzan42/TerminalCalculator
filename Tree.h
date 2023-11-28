@@ -6,6 +6,7 @@
 #include "Node.h"
 
 const std::string WORD_ERROR = "Error in word number ";
+const std::string CHARACTERS_IGNORED_ERROR = "Too many arguments, some words will be ignored.";
 
 class Tree {
 public:
@@ -16,7 +17,7 @@ public:
 	// and can be collected with "get_errors"
 	// This function is expected to be the first function called
 	// after the creation of the tree
-	void create(const std::string &formula);
+	Tree(const std::string &formula);
 
 	// Goes through all the nodes and collect errors
 	std::vector<std::string> get_errors() const;
@@ -39,6 +40,7 @@ public:
 	~Tree();
 private:
 	Node *root;
+	bool too_many_characters_err;
 
 	// Creates tree node from the words. Start is index of first word
 	// Processed by this function. After execution start is the index of

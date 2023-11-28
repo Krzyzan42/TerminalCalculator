@@ -46,8 +46,7 @@ void CLI::handle_enter(const std::string &args) {
 
     if(tree != 0)
         delete tree;
-    tree = new Tree();
-    tree->create(args);
+    tree = new Tree(args);
     std::vector<std::string> errors = tree->get_errors();
     if(errors.size() != 0) {
         println(TREE_ERROR);
@@ -120,8 +119,7 @@ void CLI::handle_join(const std::string &args) {
         return;
     }
 
-    Tree *joined_tree = new Tree();
-    joined_tree->create(args);
+    Tree *joined_tree = new Tree(args);
     std::vector<std::string> errors = joined_tree->get_errors();
     if(errors.size() != 0) {
         println(TREE_ERROR);

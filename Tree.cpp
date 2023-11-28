@@ -17,10 +17,11 @@ Node *Tree::create_tree(const std::vector<std::string> &words, int &start) {
     return node;
 }
 
-void Tree::create(const std::string &formula){
+Tree::Tree(const std::string &formula){
     int index = 0;
     std::vector<std::string> words = split_string(formula);
     root = create_tree(words, index);
+    too_many_characters_err = index < words.size() - 1;
     root->fix();
 }
 
@@ -37,6 +38,8 @@ std::vector<std::string> Tree::get_errors() const {
         std::string err = WORD_ERROR + word_n + message;
         str_errors.push_back(err);
     }
+    if(too_many_characters_err)
+        str_errors.push_back(CHARACTERS_IGNORED_ERROR);
 
     return str_errors;
 }
