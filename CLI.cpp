@@ -53,6 +53,8 @@ void CLI::handle_enter(const std::string &args) {
         for (int i = 0; i < errors.size(); i++)
             println(errors[i]);
         println(CURRENT_TREE +tree->to_string());
+    } else {
+        println("Formula entered succesfully!");
     }
 }
 
@@ -66,6 +68,7 @@ void CLI::handle_vars(const std::string &args) {
         return;
     }
 
+    println("Variables in current formula:");
     std::set<std::string> vars = tree->get_vars();
     std::set<std::string>::iterator it, end;
     for(it = vars.begin(), end = vars.end(); it != end; it++) {
@@ -83,7 +86,7 @@ void CLI::handle_print(const std::string &args) {
         return;
     }
 
-    println(tree->to_string());
+    println("Current formula: " + tree->to_string());
 }
 
 void CLI::handle_comp(const std::string &args) {
@@ -110,7 +113,7 @@ void CLI::handle_comp(const std::string &args) {
     }
         
     float val = tree->evaluate(values);
-    std::cout << val << '\n';
+    std::cout << "Result: " << val << '\n';
 }
 
 void CLI::handle_join(const std::string &args) {
@@ -119,8 +122,8 @@ void CLI::handle_join(const std::string &args) {
         return;
     }
 
-    Tree *joined_tree = new Tree(args);
-    std::vector<std::string> errors = joined_tree->get_errors();
+    Tree joined_tree(args);
+    std::vector<std::string> errors = joined_tree.get_errors();
     if(errors.size() != 0) {
         println(TREE_ERROR);
         for (int i = 0; i < errors.size(); i++)

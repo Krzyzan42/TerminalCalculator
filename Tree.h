@@ -18,6 +18,12 @@ public:
 	// This function is expected to be the first function called
 	// after the creation of the tree
 	Tree(const std::string &formula);
+	
+	Tree(const Tree& other);
+
+	Tree& operator=(const Tree &other);
+
+	Tree operator+(const Tree &other) const;
 
 	// Goes through all the nodes and collect errors
 	std::vector<std::string> get_errors() const;
@@ -31,8 +37,7 @@ public:
 	float evaluate(const std::vector<int> &values) const;
 
 	// Attaches root of given tree to the rightmost leaf
-	// No copy is made here, at the end the tree is destroyed
-	void join_with(Tree *tree);
+	void join_with(const Tree& tree);
 
 	// Returns formula in reverse notation
 	std::string to_string() const;

@@ -22,6 +22,8 @@ public:
 
     Node(const std::string &symbol, int id);
 
+    virtual Node *copy() const = 0;
+
     void set_child(int i, Node *child);
 
     int get_child_count() const;
@@ -66,6 +68,8 @@ protected:
     // Id of the node, needed to know which nodes generated which errors
     int id;
 
+    Node(const Node& other);
+
     void collect_errors(std::vector<std::pair<std::string, int> > &errors) const;
 
     virtual void collect_variables(std::set<std::string> &variables) const;
@@ -83,6 +87,10 @@ class FunctionNode :public Node {
 public:
     FunctionNode(const MathFuction &f, int id);
 
+    FunctionNode(const FunctionNode& other);
+
+    FunctionNode *copy() const;
+
     void fix();
 
     float evaluate(std::map<std::string, int> &values) const;
@@ -99,6 +107,10 @@ class VariableNode :public Node {
 public:
     VariableNode(const std::string &v, int id);
 
+    VariableNode(const VariableNode &other);
+
+    VariableNode *copy() const;
+
     void fix();
 
     float evaluate(std::map<std::string, int> &values) const;
@@ -114,6 +126,10 @@ class ConstNode :public Node {
 
 public:
     ConstNode(const std::string &c, int id);
+
+    ConstNode(const ConstNode& other);
+
+    ConstNode *copy() const;
 
     void fix();
 

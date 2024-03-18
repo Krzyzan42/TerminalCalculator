@@ -17,8 +17,8 @@ enum FunctionType {
 // all arguments
 struct MathFuction {
     const std::string symbol;
-    const int argument_n;
     const FunctionType type;
+    const int argument_n;
     const std::string fix_string;   
 
     MathFuction(std::string symbol, FunctionType type, int argument_n, std::string fix_string)

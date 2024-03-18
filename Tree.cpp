@@ -1,4 +1,5 @@
 #include <sstream>
+#include <iostream>
 
 #include "Tree.h"
 #include "Utils.h"
@@ -23,6 +24,27 @@ Tree::Tree(const std::string &formula){
     root = create_tree(words, index);
     too_many_characters_err = index < words.size() - 1;
     root->fix();
+}
+
+Tree::Tree(const Tree& other)
+    :too_many_characters_err(false),
+    root(other.root->copy()) { }
+
+Tree& Tree::operator=(const Tree& other) {
+    if(&other == this)
+        return *this;
+
+    delete root;
+    root = other.root->copy();
+    too_many_characters_err = other.too_many_characters_err;
+    return *this;
+}
+
+Tree Tree::operator+(const Tree &other) const {
+    Tree newTree(*this);
+    newTree.join_with(other);
+    std::cout << "Returning" << std::endl;
+    return newTree;
 }
 
 std::vector<std::string> Tree::get_errors() const {
@@ -62,10 +84,8 @@ float Tree::evaluate(const std::vector<int> &values) const {
     return root->evaluate(map);
 }
 
-void Tree::join_with(Tree *tree) {
-    root->replace_rightmost(tree->root);
-    tree->root = 0;
-    delete tree;
+void Tree::join_with(const Tree& tree) {
+    root->replace_rightmost(tree.root->copy());
 }
 
 std::string Tree::to_string() const {

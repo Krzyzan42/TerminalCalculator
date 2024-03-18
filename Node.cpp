@@ -1,5 +1,6 @@
 #include <math.h>
 #include <string>
+#include <iostream>
 
 #include "Node.h"
 
@@ -29,6 +30,16 @@ Node::Node(const std::string &symbol, int id)
     :symbol(symbol),
     id(id),
     error("") {};
+
+Node::Node(const Node& other) 
+    :child_count(other.child_count),
+    symbol(other.symbol),
+    children(new Node*[other.child_count]),
+    error(other.error),
+    id(other.id) {
+    for (size_t i = 0; i < child_count; i++)
+        children[i] = other.children[i]->copy();
+}
 
 void Node::set_child(int i, Node *child) {
     children[i] = child;
@@ -113,7 +124,7 @@ void Node::replace_rightmost(Node *node) {
     }
 
     delete next;
-    replacement->children[child_count - 1] = node;
+    replacement->children[replacement->child_count - 1] = node;
 }
 
 Node::~Node()
@@ -134,6 +145,14 @@ f(f) {
     child_count = f.argument_n;
     children = new Node*[child_count];
 };
+
+FunctionNode::FunctionNode(const FunctionNode& other)
+    :Node(other),
+    f(other.f) { }
+
+FunctionNode *FunctionNode::copy() const {
+    return new FunctionNode(*this);
+}
 
 // Checks if mathematical function/operation has all necessary arguments
 // If not, creates a default argument. For example expression "+ 2 * 3"
@@ -186,6 +205,12 @@ VariableNode::VariableNode(const std::string &v, int id) :Node(v, id) {
     child_count = 0;
 };
 
+VariableNode::VariableNode(const VariableNode &other) :Node(other) { }
+
+VariableNode *VariableNode::copy() const {
+    return new VariableNode(*this);
+}
+
 // Removes all characters that are not letter or number from the symbol
 void VariableNode::fix()  {
     std::string result = "";
@@ -214,6 +239,12 @@ void VariableNode::collect_variables(std::set<std::string> &variables) const {
 ConstNode::ConstNode(const std::string &c, int id) :Node(c, id) {
     child_count = 0;
 };
+
+ConstNode::ConstNode(const ConstNode &other) :Node(other) { }
+
+ConstNode *ConstNode::copy() const {
+    return new ConstNode(*this);
+}
 
 // Removes all characters that aren't a digit from the symbol
 // If no characters are left, then it assigns 0
